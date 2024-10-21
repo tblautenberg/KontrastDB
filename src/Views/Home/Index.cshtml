@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+
+<head>
+    <title>Login</title>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/costumecss/bgcss.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body class="white center bg-warmbg">
+
+    <!-- Particle background container - ud -->
+    <!-- <div id="particles-js" style="position: absolute; width: 100%; height: 100%; z-index: -1; background: rgba(153,0, 51, 255);" -->
+    <div class="container"> <!-- Container til alle elementer -->
+        <div class="justify-content-center"> <!-- Centrerer alt indhold -->
+            <div class="text-center col-md-12">
+               <img src="~/Images/Logo.webp" alt="Logo" class="img-fluid mb-4" style="max-height: 100px;" />
+                <div class="card col-md-12">
+                    <div class="card-header text-center bg-warm">
+                        <h4>Velkommen til kontrast databasen</h4>
+                    </div>
+                    <div class="card-body"> <!-- Viser error beskeder hvis der ikke er connection (test), eller login er forkert -->
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger">
+                                @ViewBag.ErrorMessage
+                            </div>
+                        }
+
+                        @if (ViewBag.Message != null)
+                        {
+                            <div class="alert alert-info">
+                                @ViewBag.Message
+                            </div>
+                        }
+
+                        <form method="post" asp-action="Login">
+                            <div class="form-group d-grid gap-3 mb-4" >
+                                <label for="HK">Hospitalskode</label>
+                                <input type="text" class="form-control" name="HK" placeholder="Hospitalskode..." required />
+
+                                <label for="Username">Brugernavn</label>
+                                <input type="text" class="form-control" name="username" placeholder="Brugernavn..." required />
+
+                                <label for="Password">Kodeord</label>
+                                <input type="password" class="form-control" name="password" placeholder="Kodeord..." required />
+                            </div>
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg bg-warm">Login</button>
+                            </div>
+                        </form>
+
+                        <form method="post" asp-action="TestCon" class="mt-3">
+                            <button type="submit" class="btn btn-secondary">Test databaseforbindelse</button>
+                        </form>
+
+                        <!--
+                        <form method="post" asp-action="createuser" class="mt-3">
+                            <button type="submit" class="btn btn-secondary">Not a user yet? Create one here!</button>
+                        </form>
+                        -->
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- loader particels scriptet ind -->
+    <script src="~/JS/particles.js"></script>
+    <script src="~/JS/app.js"></script>
+
+
+
+</body>
+
+</html>

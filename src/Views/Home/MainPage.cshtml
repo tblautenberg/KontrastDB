@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<head>
+    <title>KontrastDB</title>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/costumecss/bgcss.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+
+
+<nav class="navbar navbar-light bg-warm">
+    <a class="navbar-brand" href="#">
+        <img src="~/Images/Medical.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        KontrastDB
+    </a>
+    <div class="ml-auto">
+        <a href="#" class="btn btn-secondary">Opret kontrast reaktion</a>
+        <a href="#" class="btn btn-secondary">Se statistikker</a>
+        <form method="post" asp-action="LogOut" class="d-inline">
+            <button type="submit" class="btn btn-danger">Log ud</button>
+        </form>
+    </div>
+</nav>
+
+
+<body class="white center bg-warmbg">
+<div>
+    <div class="container justify-content-center">
+        <div class="text-center col-md-12">
+             @if (ViewBag.userName != null)
+             {
+                 <div>
+                     <p> Du er logget ind med brugernavn: @ViewBag.userName </p>
+                 </div>
+             }
+        </div>
+    </div>
+</div>
+
+</body>

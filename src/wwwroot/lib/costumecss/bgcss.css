@@ -1,0 +1,7 @@
+.bg-warmbg {
+    background-color: rgba(255, 0, 0, 0.08) !important; /* Adjust opacity */
+}
+
+.bg-warm {
+    background-color: rgba(255, 0, 0, 0.5) !important; /* Adjust opacity */
+}
