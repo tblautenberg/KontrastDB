@@ -7,5 +7,7 @@ namespace KontrastDB.Models
         public KontrastContext(DbContextOptions<KontrastContext> options) : base(options) { }
 
         public DbSet<Users> Users => Set<Users>();
+
+        public DbSet<ContrastReactions> ContrastReactions => Set<ContrastReactions>();
     }
 }

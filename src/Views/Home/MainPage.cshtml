@@ -1,8 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<KontrastDB.Models.ContrastReactions>
 
 <head>
     <title>KontrastDB</title>
@@ -11,36 +7,31 @@
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
-
-<nav class="navbar navbar-light bg-warm">
-    <a class="navbar-brand" href="#">
-        <img src="~/Images/Medical.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        KontrastDB
-    </a>
-    <div class="ml-auto m-2">
-        <a href="#" class="btn btn-secondary">Opret kontrast reaktion</a>
-        <a href="#" class="btn btn-secondary">Eksporter til excel</a>
-        <form method="post" asp-action="LogOut" class="d-inline">
-            <button type="submit" class="btn btn-danger">Log ud</button>
-        </form>
-    </div>
-</nav>
-
-
 <body class="white center bg-warmbg">
-<div>
+    <nav class="navbar navbar-light bg-warm">
+        <a class="navbar-brand" href="#">
+            <img src="~/Images/Medical.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            KontrastDB
+        </a>
+        <div class="ml-auto m-2">
+            <a href="#" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#reactionModal">Opret kontrast reaktion</a>
+            <a href="#" class="btn btn-secondary">Eksporter til excel</a>
+            <form method="post" asp-action="LogOut" class="d-inline">
+                <button type="submit" class="btn btn-danger">Log ud</button>
+            </form>
+        </div>
+    </nav>
+
+    <div>
         @if (ViewBag.userName != null)
         {
             <div class="p" style="margin-top: 20px; margin-left: 5px;">
-                <!-- Moves the box down and farther from the left -->
                 <span class="border border-5" style="display: inline-block; padding: 5px; border-width: 3px;">
                     <p>Du er logget ind med brugernavn: @ViewBag.userName</p>
                     <p>Din hospitals kode er: @ViewBag.HK</p>
                 </span>
             </div>
         }
-
-
 
         <table class="table table-striped" style="margin-top: 20px;">
             <thead>
@@ -54,53 +45,77 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Dyspnø og kvalme</td>
-                    <td>21/10-2024</td>
-                    <td>LP-24152</td>
-                    <td>Iomeron 350</td>
-                    <td>
-                        <button class="btn btn-primary">Rediger</button>
-                        <button class="btn btn-danger">Slet</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Udslæt og kløe</td>
-                    <td>15/09-2024</td>
-                    <td>BR-15241</td>
-                    <td>Visipaque 320</td>
-                    <td>
-                        <button class="btn btn-primary">Rediger</button>
-                        <button class="btn btn-danger">Slet</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Allergisk reaktion</td>
-                    <td>05/10-2024</td>
-                    <td>KM-84231</td>
-                    <td>Omnipaque 300</td>
-                    <td>
-                        <button class="btn btn-primary">Rediger</button>
-                        <button class="btn btn-danger">Slet</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td>Hovedpine og svimmelhed</td>
-                    <td>02/08-2024</td>
-                    <td>RX-56231</td>
-                    <td>Ultravist 370</td>
-                    <td>
-                        <button class="btn btn-primary">Rediger</button>
-                        <button class="btn btn-danger">Slet</button>
-                    </td>
-                </tr>
+                @if (Model != null && Model.Any())
+                {
+                    int counter = 1;
+                    foreach (var reaction in Model)
+                    {
+                        <tr>
+                            <th scope="row">@counter</th>
+                            <td>@reaction.ReactionType</td>
+                            <td>@reaction.DateVarChar</td>
+                            <td>@reaction.BatchNumber</td>
+                            <td>@reaction.ContrastName</td>
+                            <td>
+                                <form method="get" asp-action="EditReaction" asp-route-id="@reaction.CaseID" class="d-inline">
+                                    <button type="submit" class="btn btn-primary">Rediger</button>
+                                </form>
+                                <form method="post" asp-action="DeleteReaction" class="d-inline" onsubmit="return confirm('Er du sikker på, at du vil slette denne reaktion?');">
+                                    <input type="hidden" name="id" value="@reaction.CaseID" />
+                                    <button type="submit" class="btn btn-danger">Slet</button>
+                                </form>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">Ingen kontrast reaktioner fundet.</td>
+                    </tr>
+                }
             </tbody>
         </table>
 
+        <!-- Modal til at oprette kontrast-->
+        <div class="modal fade" id="reactionModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Opret kontrast reaktion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createReactionForm" method="post" asp-action="CreateReaction">
+                            <div class="form-group">
+                                <label for="reactionType">Type af reaktion</label>
+                                <input type="text" class="form-control" id="reactionType" name="reactionType" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateVarChar">Dato</label>
+                                <input type="text" class="form-control" id="dateVarChar" name="dateVarChar" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="batchNumber">Batchnummer</label>
+                                <input type="text" class="form-control" id="batchNumber" name="batchNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contrastName">Navn på kontrast</label>
+                                <input type="text" class="form-control" id="contrastName" name="contrastName" required>
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <button type="submit" class="btn btn-primary">Gem ændringer</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-
+    </div>
 </body>
+
