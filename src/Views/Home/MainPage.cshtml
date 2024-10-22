@@ -62,6 +62,8 @@
                                 </form>
                                 <form method="post" asp-action="DeleteReaction" class="d-inline" onsubmit="return confirm('Er du sikker på, at du vil slette denne reaktion?');">
                                     <input type="hidden" name="id" value="@reaction.CaseID" />
+                                    <input type="hidden" name="username" value="@ViewBag.userName" /> <!-- Include username -->
+                                    <input type="hidden" name="HK" value="@ViewBag.HK" /> <!-- Include HK -->
                                     <button type="submit" class="btn btn-danger">Slet</button>
                                 </form>
                             </td>
@@ -90,6 +92,8 @@
                     </div>
                     <div class="modal-body">
                         <form id="createReactionForm" method="post" asp-action="CreateReaction">
+                            <input type="hidden" name="username" value="@ViewBag.userName" /> <!-- Include username -->
+                            <input type="hidden" name="HK" value="@ViewBag.HK" /> <!-- Include HK -->
                             <div class="form-group">
                                 <label for="reactionType">Type af reaktion</label>
                                 <input type="text" class="form-control" id="reactionType" name="reactionType" required>

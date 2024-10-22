@@ -92,24 +92,25 @@ namespace BugSplatter.Controllers {
             return View("Index");
         }
 
-        // CRUD til databasen
-
         [HttpPost]
-        public IActionResult CreateReaction(ContrastReactions reaction)
+        public IActionResult CreateReaction(ContrastReactions reaction, string username, string HK)
         {
             if (ModelState.IsValid)
             {
                 _context.ContrastReactions.Add(reaction);
                 _context.SaveChanges();
-                return RedirectToAction("MainPage");
+                return RedirectToAction("MainPage", new { username, HK }); // Pass username and HK
             }
 
-            // If model state is invalid, return to the view (you may want to handle this differently)
+            // If model state is invalid, return to the view with the model state errors
+            ViewBag.userName = username; // Set username for the current request
+            ViewBag.HK = HK;             // Set HK for the current request
             return View(reaction);
         }
 
+
         [HttpPost]
-        public IActionResult DeleteReaction(int id)
+        public IActionResult DeleteReaction(int id, string username, string HK)
         {
             var reaction = _context.ContrastReactions.Find(id);
             if (reaction != null)
@@ -117,7 +118,8 @@ namespace BugSplatter.Controllers {
                 _context.ContrastReactions.Remove(reaction);
                 _context.SaveChanges();
             }
-            return RedirectToAction("MainPage"); // Redirect to your main view after deletion
+            return RedirectToAction("MainPage", new { username, HK }); // Pass username and HK
         }
+
     }
 }
