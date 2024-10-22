@@ -36,6 +36,7 @@ namespace BugSplatter.Controllers {
                     if (user.password == password && user.HK == HK)
                     {
                         ViewBag.userName = username;
+                        ViewBag.HK = HK;
                         return View("MainPage");
                     }
                 }

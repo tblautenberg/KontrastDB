@@ -17,9 +17,9 @@
         <img src="~/Images/Medical.png" width="30" height="30" class="d-inline-block align-top" alt="">
         KontrastDB
     </a>
-    <div class="ml-auto">
+    <div class="ml-auto m-2">
         <a href="#" class="btn btn-secondary">Opret kontrast reaktion</a>
-        <a href="#" class="btn btn-secondary">Se statistikker</a>
+        <a href="#" class="btn btn-secondary">Eksporter til excel</a>
         <form method="post" asp-action="LogOut" class="d-inline">
             <button type="submit" class="btn btn-danger">Log ud</button>
         </form>
@@ -29,16 +29,78 @@
 
 <body class="white center bg-warmbg">
 <div>
-    <div class="container justify-content-center">
-        <div class="text-center col-md-12">
-             @if (ViewBag.userName != null)
-             {
-                 <div>
-                     <p> Du er logget ind med brugernavn: @ViewBag.userName </p>
-                 </div>
-             }
-        </div>
-    </div>
-</div>
+        @if (ViewBag.userName != null)
+        {
+            <div class="p" style="margin-top: 20px; margin-left: 5px;">
+                <!-- Moves the box down and farther from the left -->
+                <span class="border border-5" style="display: inline-block; padding: 5px; border-width: 3px;">
+                    <p>Du er logget ind med brugernavn: @ViewBag.userName</p>
+                    <p>Din hospitals kode er: @ViewBag.HK</p>
+                </span>
+            </div>
+        }
+
+
+
+        <table class="table table-striped" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th scope="col">Case #</th>
+                    <th scope="col">Type af reaktion</th>
+                    <th scope="col">Dato</th>
+                    <th scope="col">Batchnummer</th>
+                    <th scope="col">Navn på kontrast</th>
+                    <th scope="col">Slet eller rediger</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Dyspnø og kvalme</td>
+                    <td>21/10-2024</td>
+                    <td>LP-24152</td>
+                    <td>Iomeron 350</td>
+                    <td>
+                        <button class="btn btn-primary">Rediger</button>
+                        <button class="btn btn-danger">Slet</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Udslæt og kløe</td>
+                    <td>15/09-2024</td>
+                    <td>BR-15241</td>
+                    <td>Visipaque 320</td>
+                    <td>
+                        <button class="btn btn-primary">Rediger</button>
+                        <button class="btn btn-danger">Slet</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Allergisk reaktion</td>
+                    <td>05/10-2024</td>
+                    <td>KM-84231</td>
+                    <td>Omnipaque 300</td>
+                    <td>
+                        <button class="btn btn-primary">Rediger</button>
+                        <button class="btn btn-danger">Slet</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">4</th>
+                    <td>Hovedpine og svimmelhed</td>
+                    <td>02/08-2024</td>
+                    <td>RX-56231</td>
+                    <td>Ultravist 370</td>
+                    <td>
+                        <button class="btn btn-primary">Rediger</button>
+                        <button class="btn btn-danger">Slet</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
 
 </body>
