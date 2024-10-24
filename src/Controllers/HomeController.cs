@@ -29,6 +29,24 @@ namespace BugSplatter.Controllers {
             return View(reactions);
         }
 
+        [HttpPost]
+        public IActionResult FilterReactions(string contrastMedia)
+        {
+            IEnumerable<ContrastReactions> filteredReactions;
+
+            if (contrastMedia == "All")
+            {
+                filteredReactions = _context.ContrastReactions.ToList(); // Get all records
+            }
+            else
+            {
+                filteredReactions = _context.ContrastReactions
+                    .Where(r => r.ContrastName == contrastMedia).ToList(); // Filter by selected contrast media
+            }
+
+            return View("MainPage", filteredReactions); // Return the filtered model to the view
+        }
+
 
 
 
@@ -101,16 +119,11 @@ namespace BugSplatter.Controllers {
                 _context.SaveChanges();
                 return RedirectToAction("MainPage", new { username, HK }); // Pass username and HK
             }
-
-            // If model state is invalid, return to the view with the model state errors
-            ViewBag.userName = username; // Set username for the current request
-            ViewBag.HK = HK;             // Set HK for the current request
             return View(reaction);
         }
 
-
         [HttpPost]
-        public IActionResult DeleteReaction(int id, string username, string HK)
+        public IActionResult DeleteReaction(int id, string username, string HK) // Får model-bindet ID fra viewets submit form
         {
             var reaction = _context.ContrastReactions.Find(id);
             if (reaction != null)
@@ -120,6 +133,5 @@ namespace BugSplatter.Controllers {
             }
             return RedirectToAction("MainPage", new { username, HK }); // Pass username and HK
         }
-
     }
 }

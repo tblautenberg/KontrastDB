@@ -10,5 +10,6 @@ namespace KontrastDB.Models
         public string DateVarChar { get; set; }
         public string BatchNumber { get; set; }
         public string ContrastName { get; set; }
+        public string Concentration { get; set; }
     }
 }

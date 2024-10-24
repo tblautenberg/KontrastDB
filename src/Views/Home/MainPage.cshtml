@@ -7,119 +7,150 @@
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
-<body class="white center bg-warmbg">
+<body class="white center">
     <nav class="navbar navbar-light bg-warm">
         <a class="navbar-brand" href="#">
             <img src="~/Images/Medical.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            KontrastDB
+            <b><i>KontrastDB</i></b>
         </a>
         <div class="ml-auto m-2">
             <a href="#" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#reactionModal">Opret kontrast reaktion</a>
-            <a href="#" class="btn btn-secondary">Eksporter til excel</a>
+
+            <div class="dropdown d-inline">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Eksporter til
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#">Word (.docx)</a></li>
+                    <li><a class="dropdown-item" href="#">Excel (.xls)</a></li>
+                    <li><a class="dropdown-item" href="#">LaTex (*.tex)</a></li>
+                </ul>
+            </div>
+
             <form method="post" asp-action="LogOut" class="d-inline">
                 <button type="submit" class="btn btn-danger">Log ud</button>
             </form>
         </div>
     </nav>
 
+
     <div>
         @if (ViewBag.userName != null)
         {
-            <div class="p" style="margin-top: 20px; margin-left: 5px;">
-                <span class="border border-5" style="display: inline-block; padding: 5px; border-width: 3px;">
-                    <p>Du er logget ind med brugernavn: @ViewBag.userName</p>
-                    <p>Din hospitals kode er: @ViewBag.HK</p>
+            <div class="d-flex align-items-center" style="margin-top: 20px; margin-left: 5px;">
+                <span class="border border-5 me-2" style="display: inline-block; padding: 5px; border-width: 3px;">
+                    <p>Du er logget ind med brugernavn: <b>@ViewBag.userName</b></p>
+                    <p>Din hospitals kode er: <b>@ViewBag.HK</b></p>
                 </span>
+
+                <!-- Filter Buttons -->
+                <form method="post" action="@Url.Action("FilterReactions", "Home")" class="d-inline">
+                    <button type="submit" name="contrastMedia" value="Iomeron" class="btn btn-secondary me-2">Iomeron</button>
+                    <button type="submit" name="contrastMedia" value="Visipaque" class="btn btn-secondary me-2">Visipaque</button>
+                    <button type="submit" name="contrastMedia" value="Omnipaque" class="btn btn-secondary me-2">Omnipaque</button>
+                    <button type="submit" name="contrastMedia" value="All" class="btn btn-secondary me-2">Vis alle</button>
+                </form>
             </div>
         }
+    </div>
 
-        <table class="table table-striped" style="margin-top: 20px;">
-            <thead>
-                <tr>
-                    <th scope="col">Case #</th>
-                    <th scope="col">Type af reaktion</th>
-                    <th scope="col">Dato</th>
-                    <th scope="col">Batchnummer</th>
-                    <th scope="col">Navn på kontrast</th>
-                    <th scope="col">Slet eller rediger</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    int counter = 1;
-                    foreach (var reaction in Model)
-                    {
-                        <tr>
-                            <th scope="row">@counter</th>
-                            <td>@reaction.ReactionType</td>
-                            <td>@reaction.DateVarChar</td>
-                            <td>@reaction.BatchNumber</td>
-                            <td>@reaction.ContrastName</td>
-                            <td>
-                                <form method="get" asp-action="EditReaction" asp-route-id="@reaction.CaseID" class="d-inline">
-                                    <button type="submit" class="btn btn-primary">Rediger</button>
-                                </form>
-                                <form method="post" asp-action="DeleteReaction" class="d-inline" onsubmit="return confirm('Er du sikker på, at du vil slette denne reaktion?');">
-                                    <input type="hidden" name="id" value="@reaction.CaseID" />
-                                    <input type="hidden" name="username" value="@ViewBag.userName" /> <!-- Include username -->
-                                    <input type="hidden" name="HK" value="@ViewBag.HK" /> <!-- Include HK -->
-                                    <button type="submit" class="btn btn-danger">Slet</button>
-                                </form>
-                            </td>
-                        </tr>
-                        counter++;
-                    }
-                }
-                else
+    <table class="table table-striped" style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th scope="col">Case #</th>
+                <th scope="col">Type af reaktion</th>
+                <th scope="col">Dato</th>
+                <th scope="col">Batchnummer</th>
+                <th scope="col">Navn på kontrast</th>
+                <th scope="col">Concentration</th> <!-- New column -->
+                <th scope="col">Slet eller rediger</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int counter = 1;
+                foreach (var reaction in Model)
                 {
                     <tr>
-                        <td colspan="6">Ingen kontrast reaktioner fundet.</td>
+                        <th scope="row">@counter</th>
+                        <td>@reaction.ReactionType</td>
+                        <td>@reaction.DateVarChar</td>
+                        <td>@reaction.BatchNumber</td>
+                        <td>@reaction.ContrastName</td>
+                        <td>@reaction.Concentration</td> <!-- Display concentration -->
+                        <td>
+                            <form method="get" asp-action="EditReaction" asp-route-id="@reaction.CaseID" class="d-inline">
+                                <button type="submit" class="btn btn-primary">Rediger</button>
+                            </form>
+                            <form method="post" asp-action="DeleteReaction" class="d-inline" onsubmit="return confirm('Er du sikker på, at du vil slette denne reaktion?');">
+                                <input type="hidden" name="id" value="@reaction.CaseID" />
+                                <input type="hidden" name="username" value="@ViewBag.userName" />
+                                <input type="hidden" name="HK" value="@ViewBag.HK" />
+                                <button type="submit" class="btn btn-danger">Slet</button>
+                            </form>
+                        </td>
                     </tr>
+                    counter++;
                 }
-            </tbody>
-        </table>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7">Ingen kontrast reaktioner fundet.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-        <!-- Modal til at oprette kontrast-->
-        <div class="modal fade" id="reactionModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Opret kontrast reaktion</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="createReactionForm" method="post" asp-action="CreateReaction">
-                            <input type="hidden" name="username" value="@ViewBag.userName" /> <!-- Include username -->
-                            <input type="hidden" name="HK" value="@ViewBag.HK" /> <!-- Include HK -->
-                            <div class="form-group">
-                                <label for="reactionType">Type af reaktion</label>
-                                <input type="text" class="form-control" id="reactionType" name="reactionType" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="dateVarChar">Dato</label>
-                                <input type="text" class="form-control" id="dateVarChar" name="dateVarChar" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="batchNumber">Batchnummer</label>
-                                <input type="text" class="form-control" id="batchNumber" name="batchNumber" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contrastName">Navn på kontrast</label>
-                                <input type="text" class="form-control" id="contrastName" name="contrastName" required>
-                            </div>
-                            <div style="margin-top: 10px;">
-                                <button type="submit" class="btn btn-primary">Gem ændringer</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
-                            </div>
-                        </form>
-                    </div>
+
+
+    <!-- Modal til at oprette kontrast-->
+    <div class="modal fade" id="reactionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Opret kontrast reaktion</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="createReactionForm" method="post" asp-action="CreateReaction">
+                        <input type="hidden" name="username" value="@ViewBag.userName" /> <!-- Include username -->
+                        <input type="hidden" name="HK" value="@ViewBag.HK" /> <!-- Include HK -->
+                        <div class="form-group">
+                            <label for="reactionType">Type af reaktion</label>
+                            <input type="text" class="form-control" id="reactionType" name="reactionType" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateVarChar">Dato</label>
+                            <input type="text" class="form-control" id="dateVarChar" name="dateVarChar" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="batchNumber">Batchnummer</label>
+                            <input type="text" class="form-control" id="batchNumber" name="batchNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contrastName">Navn på kontrast</label>
+                            <input type="text" class="form-control" id="contrastName" name="contrastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="concentration">Koncetration</label>
+                            <input type="text" class="form-control" id="concentration" name="concentration" required>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <button type="submit" class="btn btn-primary">Gem ændringer</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuller</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
+
 </body>
+
+<footer>
+</footer>
 
