@@ -44,11 +44,23 @@
                 </span>
 
                 <!-- Filter Buttons -->
-                <form method="post" action="@Url.Action("FilterReactions", "Home")" class="d-inline">
-                    <button type="submit" name="contrastMedia" value="Iomeron" class="btn btn-secondary me-2">Iomeron</button>
-                    <button type="submit" name="contrastMedia" value="Visipaque" class="btn btn-secondary me-2">Visipaque</button>
-                    <button type="submit" name="contrastMedia" value="Omnipaque" class="btn btn-secondary me-2">Omnipaque</button>
-                    <button type="submit" name="contrastMedia" value="All" class="btn btn-secondary me-2">Vis alle</button>
+                <form method="post" action="@Url.Action("FilterReactions", "Home")">
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <button type="submit" name="contrastMedia" value="Iomeron" class="btn btn-primary w-100">Iomeron</button>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <button type="submit" name="contrastMedia" value="Visipaque" class="btn btn-primary w-100">Visipaque</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" name="contrastMedia" value="Omnipaque" class="btn btn-primary w-100">Omnipaque</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" name="contrastMedia" value="All" class="btn btn-primary w-100">Vis alle</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="username" value="@ViewBag.userName" />
+                    <input type="hidden" name="HK" value="@ViewBag.HK" />
                 </form>
             </div>
         }

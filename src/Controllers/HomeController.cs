@@ -30,7 +30,7 @@ namespace BugSplatter.Controllers {
         }
 
         [HttpPost]
-        public IActionResult FilterReactions(string contrastMedia)
+        public IActionResult FilterReactions(string contrastMedia, string username, string HK)
         {
             IEnumerable<ContrastReactions> filteredReactions;
 
@@ -44,6 +44,9 @@ namespace BugSplatter.Controllers {
                     .Where(r => r.ContrastName == contrastMedia).ToList(); // Filter by selected contrast media
             }
 
+
+            ViewBag.userName = username;
+            ViewBag.HK = HK;
             return View("MainPage", filteredReactions); // Return the filtered model to the view
         }
 
